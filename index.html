@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ILambda</title>
+  <link rel="stylesheet" href="css/common.css">
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="https://unpkg.com/vue"></script>
+
+</head>
+<body>
+  <div class="box">
+    <div class="box-in">
+      <div class="item">
+        <svg id="myChart1" width="320" height="240"></svg>
+      </div>
+      <div class="item">
+        <canvas id="myChart2"></canvas>
+      </div>
+      <div class="item">
+      	<canvas id="myChart3"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="box">
+    <div class="box-in">
+      <div class="item">
+        <canvas id="myChart4"></canvas>
+      </div>
+      <div class="item">
+        <canvas id="myChart5"></canvas>
+      </div>
+      <div class="item">
+      	<canvas id="myChart6"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="box">
+    <div class="box-in">
+      <div class="item">
+        <canvas id="myChart7"></canvas>
+      </div>
+      <div class="item">
+        <canvas id="myChart8"></canvas>
+      </div>
+      <div class="item">
+      	<canvas id="myChart9"></canvas>
+      </div>
+    </div>
+  </div>
+<div id="example">{{ message }}</div>
+  <script>
+    var vm = new Vue({
+  el: '#example',
+  data: {
+    message: '123'
+  }
+})
+vm.message = 'new message' // change data
+vm.$el.textContent === 'new message' // false
+Vue.nextTick(function () {
+  vm.$el.textContent === 'new message' // true
+})
+Vue.component('example', {
+  template: '<span>{{ message }}</span>',
+  data: function () {
+    return {
+      message: 'not updated'
+    }
+  },
+  methods: {
+    updateMessage: function () {
+      this.message = 'updated'
+      console.log(this.$el.textContent) // => 'not updated'
+      this.$nextTick(function () {
+        console.log(this.$el.textContent) // => 'updated'
+      })
+    }
+  }
+})
+    var svg = d3.select("#myChart1");
+    margin = {top: 20, right: 20, bottom: 30, left: 50};
+    width = +svg.attr("width") - margin.left - margin.right;
+    height = +svg.attr("height") - margin.top - margin.bottom;
+    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+var parseTime = d3.timeParse("%d-%b-%y");
+
+var x = d3.scaleTime()
+    .rangeRound([0, width]);
+
+var y = d3.scaleLinear()
+    .rangeRound([height, 0]);
+
+var line = d3.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d.close); });
+
+d3.tsv("data/data.tsv", function(d) {
+  d.date = parseTime(d.date);
+  d.close = +d.close;
+  return d;
+}, function(error, data) {
+  if (error) throw error;
+
+  x.domain(d3.extent(data, function(d) { return d.date; }));
+  y.domain(d3.extent(data, function(d) { return d.close; }));
+
+  g.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x))
+    .select(".domain")
+      .remove();
+
+  g.append("g")
+      .call(d3.axisLeft(y))
+    .append("text")
+      .attr("fill", "#000")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", "0.71em")
+      .attr("text-anchor", "end")
+      .text("Price ($)");
+
+  g.append("path")
+      .datum(data)
+      .attr("fill", "none")
+      .attr("stroke", "steelblue")
+      .attr("stroke-linejoin", "round")
+      .attr("stroke-linecap", "round")
+      .attr("stroke-width", 1.5)
+      .attr("d", line);
+});
+
+  </script>
+ </body>
+</html>

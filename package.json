@@ -1,0 +1,22 @@
+{
+  "name": "ilambda-webserver",
+  "version": "1.0.0",
+  "description": "ILambda web Server",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ilambda"
+  ],
+  "author": "Kai Li",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.15.5",
+    "jade": "^1.11.0",
+    "jdbc": "^0.5.1",
+    "nib": "^1.1.2",
+    "pug": "^2.0.0-rc.4",
+    "stylus": "^0.54.5"
+  }
+}

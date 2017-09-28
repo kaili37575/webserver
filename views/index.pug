@@ -1,0 +1,31 @@
+doctype html
+head
+  include includes/head.pug
+  style
+    include css/common.css
+
+body 
+  button#randomizeData randomizeData
+  button#addDataset addDataset
+  button#removeDataset emoveDataset
+  button#addData addData
+  button#removeData removeData
+
+  .box
+    .box-in
+      .item
+        svg&attributes({'width': 320,'height':240})
+      .item
+        canvas#myChart2&attributes({'width': 320,'height':240})
+      .item
+        canvas#myChart3
+
+  table
+      tbody
+        each item in data
+          tr
+            td #{item}
+  script
+    include scripts/test.js
+
+  include includes/foot.pug
